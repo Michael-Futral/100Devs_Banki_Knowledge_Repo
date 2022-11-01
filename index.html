@@ -1,0 +1,400 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<h1 align="center">100 Devs Frontend Interview Banki</h1>
+
+<main>
+    <body>
+        <ol>
+            <li>
+
+                <div class="question-container">
+                    <input type="checkbox"  class="scales" name="scales" unchecked>
+                    <label for="scales" class="question">
+                        Explain event delegation
+                    </label>
+                   <details>
+                   <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                    <div class="anwswer-container">
+                        <p>
+                            Event delegation is a technique involving adding event listeners to a parent element instead of adding them to the descendant elements.
+                            The listener will fire whenever the event is triggered on the descendant elements due to event bubbling up the DOM. The benefits of this technique are:
+
+                            Memory footprint goes down because only one single handler is needed on the parent element, rather than having to attach event handlers on each descendant.
+                            There is no need to unbind the handler from elements that are removed and to bind the event for new elements.
+                        </p>
+                        <p>
+                            References:
+                        <p>
+                            <a href="https://davidwalsh.name/event-delegate" target="_blank" rel="noopener noreferrer">
+                                https://davidwalsh.name/event-delegate
+                            </a>
+                        <br>
+                            <a href="https://stackoverflow.com/questions/1687296/what-is-dom-event-delegation" target="_blank" rel="noopener noreferrer">
+                                https://stackoverflow.com/questions/1687296/what-is-dom-event-delegation
+                            </a>
+                        </details>
+                    </div>
+                    <hr>
+                </div>
+            </li>
+
+            <li>
+                <div class="question-container">
+                    <input type="checkbox"  class="scales" name="scales" unchecked>
+                        <label for="scales" class="question">
+                            Explain how this works in JavaScript
+                        </label>
+                        <details>
+                            <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                                <div class="anwswer-container">
+
+                                    <p>
+                                    There's no simple explanation for this; it is one of the most confusing concepts in JavaScript. A hand-wavey explanation is that the value of this depends on how the function is called. I have read many explanations on this online, and I found Arnav Aggrawal's explanation to be the clearest. The following rules are applied:
+                                    <ol>
+                                        <li class="list-item">
+                                            If the new keyword is used when calling the function, this inside the function is a brand new object.
+                                        </li>
+                                        <li class="list-item">
+                                            If apply, call, or bind are used to call/create a function, this inside the function is the object that is passed in as the argument.
+                                        </li>
+                                        <li class="list-item">
+                                            If a function is called as a method, such as obj.method() — this is the object that the function is a property of.
+                                        </li>
+                                        <li class="list-item">
+                                            If a function is invoked as a free function invocation, meaning it was invoked without any of the conditions present above, this is the global object. In a browser, it is the window object. If in strict mode ('use strict'), this will be undefined instead of the global object.
+                                        </li>
+                                        <li class="list-item">
+                                            If multiple of the above rules apply, the rule that is higher wins and will set the this value.
+                                        </li>
+                                        <li class="list-item">
+                                            If the function is an ES2015 arrow function, it ignores all the rules above and receives the this value of its surrounding scope at the time it is created.
+                                        </li>
+                                    </p>
+
+                                    <p>
+                                    For an in-depth explanation, do check out his <a href="https://codeburst.io/the-simple-rules-to-this-in-javascript-35d97f31bde3"  target="_blank" rel="noopener noreferrer">article on Medium</a>
+                                    </p>
+                                </div>
+                        </details>
+                    <hr>
+                </div>
+            </li>
+
+            <li>
+
+                <div class="question-container">
+                    <input type="checkbox"  class="scales" name="scales" unchecked>
+                    <label for="scales" class="question">
+                        Explain how prototypal inheritance works
+                    </label>
+                        <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                            <div class="anwswer-container">
+                                <p>
+                                    This is an extremely common JavaScript interview question. All JavaScript objects have
+                                    a __proto__ property with the exception of objects created with Object.create(null), that is a reference to another
+                                    object, which is called the object's "prototype". When a property is accessed on an object and if the property is not
+                                    found on that object, the JavaScript engine looks at the object's __proto__, and the __proto__'s __proto__ and so on,
+                                    until it finds the property defined on one of the __proto__s or until it reaches the end of the prototype chain.
+                                    This behavior simulates classical inheritance, but it is really more of
+                                    <a href="https://davidwalsh.name/javascript-objects"   target="_blank" rel="noopener noreferrer">
+                                        delegation than inheritance
+                                    </a>.
+                                    <br>
+                                <h5>Example of Prototypal Inheritance:</h5>
+                            </p>
+                                <div class="code-container">
+                                        function Parent() {
+                                        <br>
+                                        this.name = 'Parent';
+                                        <br>
+                                        }
+                                        <br>
+                                        <br>
+                                        Parent.prototype.greet = function () {
+                                        <br>
+                                        console.log('Hello from ' + this.name);
+                                        <br>
+                                        };
+                                        <br>
+                                        <br>
+                                        const child = Object.create(Parent.prototype);
+                                        <br>
+                                        child.cry = function () {
+                                        <br>
+                                        console.log('waaaaaahhhh!');
+                                        };
+                                        <br>
+                                        <br>
+                                        child.cry();
+                                        <br>
+                                        // waaaaaahhhh!
+                                        <br>
+                                        <br>
+                                        child.greet();
+                                        <br>
+                                        // hello from Parent
+                                        <br>
+                                        <br>
+                                        child.constructor;
+                                        <br>
+                                        // ƒ Parent() {
+                                        <br>
+                                        <br>
+                                        // this.name = 'Parent';
+                                        <br>
+                                        // }
+                                        <br><br>
+                                        child.constructor.name;
+                                        <br>
+                                        // 'Parent'
+                                </div>
+
+                                <p >
+                                    <strong>Things to note are:</strong>
+                                </p>
+
+                                <p>
+                                    <ul>
+                                        <li>
+                                            .greet is not defined on the child, so the engine goes up the prototype chain and finds .greet off the inherited from Parent.
+                                        </li>
+                                        <li>
+                                            We need to call Object.create in one of following ways for the prototype methods to be inherited:
+                                        </li>
+                                            <ul>
+                                                <li>
+                                                    Object.create(Parent.prototype);
+                                                </li>
+                                                <li>
+                                                    Object.create(new Parent(null));
+                                                </li>
+                                                <li>
+                                                    Object.create(objLiteral);
+                                                </li>
+                                                <li>
+                                                    Currently, child.constructor is pointing to the Parent:
+                                                </li>
+                                            </ul>
+                                            If we'd like to correct this, one option would be to do:
+                                    </ul>
+                                </p>
+
+                            </details>
+                        </div>
+                    <hr>
+                </div>
+            </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What do you think of AMD vs CommonJS?
+                </label>
+                    <details>
+                    <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                    <div class="anwswer-container">
+                        <p>
+
+                        </p>
+                    </details>
+                </div>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                 <input type="checkbox"  class="scales" name="scales" unchecked>
+                 <label for="scales" class="question">
+                     Explain why the following doesn't work as an IIFE: function foo(){ }();. What needs to be changed to properly make it an IIFE?
+                 </label>
+                 <details>
+                 <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                 <div class="anwswer-container">
+
+                 </details>
+             </div>
+             <hr>
+             </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What's the difference between a variable that is: null, undefined or undeclared? How would you go about checking for any of these states?
+                </label>
+                <details>
+                <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                <div class="anwswer-container">
+
+                </details>
+            </div>
+            <hr>
+            </div>
+        </li>
+
+        7. What is a closure, and how/why would you use one?
+           <details>
+           <summary title="Answer" class="answer"><span>Answer</span></summary>
+           <code>
+           <p>
+
+           </p>
+           </code>
+           </details>
+           <hr>
+           <br>
+
+        8. Can you describe the main difference between a .forEach loop and a .map() loop and why you would pick one versus the other?
+           <details>
+           <summary title="Answer" class="answer"><span>Answer</span></summary>
+           <code>
+           <p>
+
+           </p>
+           </code>
+           </details>
+           <hr>
+           <br>
+
+        9. What's a typical use case for anonymous functions?
+           <details>
+           <summary title="Answer" class="answer"><span>Answer</span></summary>
+           <code>
+           <p>
+
+           </p>
+           </code>
+           </details>
+           <hr>
+           <br>
+
+        10. How do you organize your code? (module pattern, classical inheritance?)
+            <details>
+            <summary title="Answer" class="answer"><span>Answer</span></summary>
+            <code>
+            <p>
+
+           </p>
+           </code>
+           </details>
+           <hr>
+           <br>
+
+        11. What's the difference between host objects and native objects?
+            <details>
+            <summary title="Answer" class="answer"><span>Answer</span></summary>
+            <code>
+            <p>
+
+           </p>
+           </code>
+           </details>
+           <hr>
+           <br>
+
+        12. Difference between: function Person(){}, var person = Person(), and var person = new Person()?
+            <details>
+            <summary title="Answer" class="answer"><span>Answer</span></summary>
+            <code>
+            <p>
+
+           </p>
+           </code>
+           </details>
+           <hr>
+           <br>
+
+        13. What's the difference between .call and .apply?
+            <details>
+            <summary title="Answer" class="answer"><span>Answer</span></summary>
+            <code>
+            <p>
+
+           </p>
+           </code>
+           </details>
+           <hr>
+           <br>
+
+        14. Explain Function.prototype.bind.
+            <details>
+            <summary title="Answer" class="answer"><span>Answer</span></summary>
+            <code>
+            <p>
+
+           </p>
+           </code>
+           </details>
+           <hr>
+           <br>
+
+        15. When would you use document.write()?
+            <details>
+            <summary title="Answer" class="answer"><span>Answer</span></summary>
+            <code>
+            <p>
+
+           </p>
+           </code>
+           </details>
+           <hr>
+           <br>
+    </ol>
+
+
+
+
+     16. What's the difference between feature detection, feature inference, and using the UA string?
+       17. Explain Ajax in as much detail as possible.
+       18. What are the advantages and disadvantages of using Ajax?
+       19. Explain how JSONP works (and how it's not really Ajax).
+       20. Have you ever used JavaScript templating? If so, what libraries have you used?
+       21. Explain "hoisting".
+       22. Describe event bubbling.
+       23. What's the difference between an "attribute" and a "property"?
+       24. Why is extending built-in JavaScript objects not a good idea?
+       Difference between document load event and document DOMContentLoaded event?
+       What is the difference between == and ===?
+       Explain the same-origin policy with regards to JavaScript.
+       Make this work:
+       Why is it called a Ternary expression, what does the word "Ternary" indicate?
+       What is "use strict";? What are the advantages and disadvantages to using it?
+       Create a for loop that iterates up to 100 while outputting "fizz" at multiples of 3, "buzz" at multiples of 5 and "fizzbuzz" at multiples of 3 and 5.
+       Why is it, in general, a good idea to leave the global scope of a website as-is and never touch it?
+       Why would you use something like the load event? Does this event have disadvantages? Do you know any alternatives, and why would you use those?
+       Explain what a single page app is and how to make one SEO-friendly.
+       What is the extent of your experience with Promises and/or their polyfills?
+       What are the pros and cons of using Promises instead of callbacks?
+       What are some of the advantages/disadvantages of writing JavaScript code in a language that compiles to JavaScript?
+       What tools and techniques do you use for debugging JavaScript code?
+       What language constructions do you use for iterating over object properties and array items?
+       Explain the difference between mutable and immutable objects.
+       Explain the difference between synchronous and asynchronous functions.
+       What is event loop? What is the difference between call stack and task queue?
+       Explain the differences on the usage of foo between function foo() {} and var foo = function() {}
+       What are the differences between variables created using let, var or const?
+       What are the differences between ES6 class and ES5 function constructors?
+       Can you offer a use case for the new arrow => function syntax? How does this new syntax differ from other functions?
+       What advantage is there for using the arrow syntax for a method in a constructor?
+       What is the definition of a higher-order function?
+       Can you give an example for destructuring an object or an array?
+       ES6 Template Literals offer a lot of flexibility in generating strings, can you give an example?
+       Can you give an example of a curry function and why this syntax offers an advantage?
+       What are the benefits of using spread syntax and how is it different from rest syntax?
+       How can you share code between files?
+       Why you might want to create static class members?
+</main>
+
+</body>
+</html>

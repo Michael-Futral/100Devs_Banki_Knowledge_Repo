@@ -1,0 +1,33 @@
+.scales {
+    border: solid;
+    background-color: green;
+    width: 20px;
+}
+
+.question {
+    width: 20px;
+    font-weight: bold;
+}
+
+.answer{
+    padding: 10px 40px 0px 40px;
+}
+
+.anwswer-container{
+    padding: 0px 40px;
+}
+
+.list-item{
+    padding: 2px;
+    width: 70%;
+}
+
+.code-container{
+    align-items: center;
+    border: solid 2px;
+    border-color: black;
+    color: #ffff;
+    border-radius: 5px;
+    width: 50%;
+    background-color: rgb(149, 130, 130);
+}
