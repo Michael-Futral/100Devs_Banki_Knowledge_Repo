@@ -203,8 +203,34 @@
                     <summary title ="Answer" class="answer"><span>Answer</span></summary>
                     <div class="anwswer-container">
                         <p>
-
+                                Both are ways to implement a module system, which was not natively present in JavaScript until
+                                ES2015 came along. CommonJS is synchronous while AMD (Asynchronous Module Definition) is obviously
+                                asynchronous. CommonJS is designed with server-side development in mind while AMD, with its support
+                                for asynchronous loading of modules, is more intended for browsers.
+                            <br>
+                            <br>
+                                I find AMD syntax to be quite verbose and CommonJS is closer to the style you would write import
+                                statements in other languages. Most of the time, I find AMD unnecessary, because if you served all
+                                your JavaScript into one concatenated bundle file, you wouldn't benefit from the async loading properties.
+                                Also, CommonJS syntax is closer to Node style of writing modules and there is less context-switching
+                                overhead when switching between client side and server side JavaScript development.
+                            <br>
+                            <br>
+                                I'm glad that with ES2015 modules, that has support for both synchronous and asynchronous loading,
+                                we can finally just stick to one approach. Although it hasn't been fully rolled out in browsers and in
+                                Node, we can always use transpilers to convert our code.
+                            <br>
+                            <br>
+                            <strong>References:</strong>
                         </p>
+                        <a href="https://auth0.com/blog/javascript-module-systems-showdown/"   target="_blank" rel="noopener noreferrer">
+                            https://auth0.com/blog/javascript-module-systems-showdown/
+                        </a>
+                        <br>
+                        <br>
+                        <a href="https://stackoverflow.com/questions/16521471/relation-between-commonjs-amd-and-requirejs"   target="_blank" rel="noopener noreferrer">
+                            https://stackoverflow.com/questions/16521471/relation-between-commonjs-amd-and-requirejs
+                        </a>
                     </details>
                 </div>
                 <hr>
@@ -220,7 +246,49 @@
                  <details>
                  <summary title ="Answer" class="answer"><span>Answer</span></summary>
                  <div class="anwswer-container">
+                    <p>
+                        function foo(){ }();. What needs to be changed to properly make it an IIFE?
+                            IIFE stands for Immediately Invoked Function Expressions. The JavaScript parser
+                            reads function foo(){ }(); as function foo(){ } and ();, where the former is a function
+                            declaration and the latter (a pair of parentheses) is an attempt at calling a function
+                            but there is no name specified, hence it throws Uncaught SyntaxError: Unexpected token ).
+                            <br>
+                            <br>
+                            Here are two ways to fix it that involves adding more parentheses: (function foo(){ })()
+                            and (function foo(){ }()). Statements that begin with function are considered to be
+                            function declarations; by wrapping this function within (), it becomes a function
+                            expression which can then be executed with the subsequent (). These functions are not
+                            exposed in the global scope and you can even omit its name if you do not need to reference
+                            itself within the body.
+                            <br>
+                            <br>
+                            You might also use void operator: void function foo(){ }();. Unfortunately, there is one
+                            issue with such approach. The evaluation of given expression is always undefined, so if
+                            your IIFE function returns anything, you can't use it. An example:
+                            <br>
+                            <br>
+                            <div class="code-container">
+                                <br>
+                                const foo = void (function bar() {
+                                    return 'foo';})();
+                                  <br>
+                                  <br>
+                                  console.log(foo); // undefined
+                                </div>
 
+                                <br>
+                                <br>
+                                References:
+
+                        <a href="http://lucybain.com/blog/2014/immediately-invoked-function-expression/"   target="_blank" rel="noopener noreferrer">
+                            http://lucybain.com/blog/2014/immediately-invoked-function-expression/
+                        </a>
+                        <br>
+                        <br>
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/void"   target="_blank" rel="noopener noreferrer">
+                            https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/void
+                        </a>
+                    </p>
                  </details>
              </div>
              <hr>
@@ -236,164 +304,929 @@
                 <details>
                 <summary title ="Answer" class="answer"><span>Answer</span></summary>
                 <div class="anwswer-container">
+                    <p>
+                        Undeclared variables are created when you assign a value to an identifier that
+                        is not previously created using var, let or const. Undeclared variables will be
+                        defined globally, outside of the current scope. In strict mode, a ReferenceError
+                        will be thrown when you try to assign to an undeclared variable. Undeclared variables
+                        are bad just like how global variables are bad. Avoid them at all cost! To check for
+                        them, wrap its usage in a try/catch block.
+                    </p>
+                    <div class="code-container">
+                        <p>
+                                function foo() {
+                            <br>
+                                x = 1; // Throws a ReferenceError in strict mode
+                            <br>
+                                }
+                            <br>
+                            <br>
+                                foo();
+                            <br>
+                                console.log(x); // 1
+                            <br>
+                            </p>
+                        </div>
 
+                        <p>
+                            A variable that is undefined is a variable that has been declared,
+                            but not assigned a value. It is of type undefined. If a function does
+                            not return any value as the result of executing it is assigned to a variable,
+                            the variable also has the value of undefined. To check for it, compare using the
+                            strict equality (===) operator or typeof which will give the 'undefined' string.
+                            Note that you should not be using the abstract equality operator to check, as
+                            it will also return true if the value is null.
+                        </p>
+
+                        <div class="code-container">
+                            <p>
+                                var foo;
+                                <br>
+                                console.log(foo); // undefined
+                                <br>
+                                console.log(foo === undefined); // true
+                                <br>
+                                console.log(typeof foo === 'undefined'); // true
+                                <br>
+                                <br>
+                                console.log(foo == null); // true. Wrong, don't use this to check!
+                                <br>
+                                <br>
+                                function bar() {}
+                                <br>
+                                var baz = bar();
+                                <br>
+                                console.log(baz); // undefined
+                            </p>
+                            </div>
                 </details>
             </div>
             <hr>
             </div>
         </li>
 
-        7. What is a closure, and how/why would you use one?
-           <details>
-           <summary title="Answer" class="answer"><span>Answer</span></summary>
-           <code>
-           <p>
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What is a closure, and how/why would you use one?
+                </label>
+                        <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
 
-           </p>
-           </code>
-           </details>
-           <hr>
-           <br>
+                            </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
 
-        8. Can you describe the main difference between a .forEach loop and a .map() loop and why you would pick one versus the other?
-           <details>
-           <summary title="Answer" class="answer"><span>Answer</span></summary>
-           <code>
-           <p>
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Can you describe the main difference between a .forEach loop and a .map() loop and why you would pick one versus the other?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
 
-           </p>
-           </code>
-           </details>
-           <hr>
-           <br>
+                            </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
 
-        9. What's a typical use case for anonymous functions?
-           <details>
-           <summary title="Answer" class="answer"><span>Answer</span></summary>
-           <code>
-           <p>
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What's a typical use case for anonymous functions?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
 
-           </p>
-           </code>
-           </details>
-           <hr>
-           <br>
 
-        10. How do you organize your code? (module pattern, classical inheritance?)
-            <details>
-            <summary title="Answer" class="answer"><span>Answer</span></summary>
-            <code>
-            <p>
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
 
-           </p>
-           </code>
-           </details>
-           <hr>
-           <br>
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    How do you organize your code? (module pattern, classical inheritance?)
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
 
-        11. What's the difference between host objects and native objects?
-            <details>
-            <summary title="Answer" class="answer"><span>Answer</span></summary>
-            <code>
-            <p>
 
-           </p>
-           </code>
-           </details>
-           <hr>
-           <br>
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
 
-        12. Difference between: function Person(){}, var person = Person(), and var person = new Person()?
-            <details>
-            <summary title="Answer" class="answer"><span>Answer</span></summary>
-            <code>
-            <p>
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What's the difference between host objects and native objects?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
 
-           </p>
-           </code>
-           </details>
-           <hr>
-           <br>
 
-        13. What's the difference between .call and .apply?
-            <details>
-            <summary title="Answer" class="answer"><span>Answer</span></summary>
-            <code>
-            <p>
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
 
-           </p>
-           </code>
-           </details>
-           <hr>
-           <br>
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Difference between: function Person(){}, var person = Person(), and var person = new Person()?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
 
-        14. Explain Function.prototype.bind.
-            <details>
-            <summary title="Answer" class="answer"><span>Answer</span></summary>
-            <code>
-            <p>
 
-           </p>
-           </code>
-           </details>
-           <hr>
-           <br>
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
 
-        15. When would you use document.write()?
-            <details>
-            <summary title="Answer" class="answer"><span>Answer</span></summary>
-            <code>
-            <p>
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What's the difference between .call and .apply?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
 
-           </p>
-           </code>
-           </details>
-           <hr>
-           <br>
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Explain Function.prototype.bind.
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    When would you use document.write()?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What's the difference between feature detection, feature inference, and using the UA string?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Explain Ajax in as much detail as possible.
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What are the advantages and disadvantages of using Ajax?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Explain how JSONP works (and how it's not really Ajax).
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Have you ever used JavaScript templating? If so, what libraries have you used?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Explain "hoisting".
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Describe event bubbling.
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What's the difference between an "attribute" and a "property"?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Why is extending built-in JavaScript objects not a good idea?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Difference between document load event and document DOMContentLoaded event?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What is the difference between == and ===?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Explain the same-origin policy with regards to JavaScript.
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Make this work:
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Why is it called a Ternary expression, what does the word "Ternary" indicate?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What is "use strict";? What are the advantages and disadvantages to using it?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Create a for loop that iterates up to 100 while outputting "fizz" at multiples of 3, "buzz" at multiples of 5 and "fizzbuzz" at multiples of 3 and 5.
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Why is it, in general, a good idea to leave the global scope of a website as-is and never touch it?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Why would you use something like the load event? Does this event have disadvantages? Do you know any alternatives, and why would you use those?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Explain what a single page app is and how to make one SEO-friendly.
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What is the extent of your experience with Promises and/or their polyfills?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What are the pros and cons of using Promises instead of callbacks?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What are some of the advantages/disadvantages of writing JavaScript code in a language that compiles to JavaScript?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What tools and techniques do you use for debugging JavaScript code?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What language constructions do you use for iterating over object properties and array items?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Explain the difference between mutable and immutable objects.
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Explain the difference between synchronous and asynchronous functions.
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What is event loop? What is the difference between call stack and task queue?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Explain the differences on the usage of foo between function foo() {} and var foo = function() {}
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What are the differences between variables created using let, var or const?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What are the differences between ES6 class and ES5 function constructors?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Can you offer a use case for the new arrow => function syntax? How does this new syntax differ from other functions?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What advantage is there for using the arrow syntax for a method in a constructor?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What is the definition of a higher-order function?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Can you give an example for destructuring an object or an array?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    ES6 Template Literals offer a lot of flexibility in generating strings, can you give an example?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    Can you give an example of a curry function and why this syntax offers an advantage?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    What are the benefits of using spread syntax and how is it different from rest syntax?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+            <div class="question-container">
+                <input type="checkbox"  class="scales" name="scales" unchecked>
+                <label for="scales" class="question">
+                    How can you share code between files?
+                </label>
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
+
+        <li>
+        <div class="question-container">
+            <input type="checkbox"  class="scales" name="scales" unchecked>
+            <label for="scales" class="question">
+
+            Why you might want to create static class members?
+                    <details>
+                        <summary title ="Answer" class="answer"><span>Answer</span></summary>
+                        <div class="anwswer-container">
+                            <p>
+
+
+                        </p>
+                    </details>
+                <hr>
+            </div>
+        </li>
     </ol>
-
-
-
-
-     16. What's the difference between feature detection, feature inference, and using the UA string?
-       17. Explain Ajax in as much detail as possible.
-       18. What are the advantages and disadvantages of using Ajax?
-       19. Explain how JSONP works (and how it's not really Ajax).
-       20. Have you ever used JavaScript templating? If so, what libraries have you used?
-       21. Explain "hoisting".
-       22. Describe event bubbling.
-       23. What's the difference between an "attribute" and a "property"?
-       24. Why is extending built-in JavaScript objects not a good idea?
-       Difference between document load event and document DOMContentLoaded event?
-       What is the difference between == and ===?
-       Explain the same-origin policy with regards to JavaScript.
-       Make this work:
-       Why is it called a Ternary expression, what does the word "Ternary" indicate?
-       What is "use strict";? What are the advantages and disadvantages to using it?
-       Create a for loop that iterates up to 100 while outputting "fizz" at multiples of 3, "buzz" at multiples of 5 and "fizzbuzz" at multiples of 3 and 5.
-       Why is it, in general, a good idea to leave the global scope of a website as-is and never touch it?
-       Why would you use something like the load event? Does this event have disadvantages? Do you know any alternatives, and why would you use those?
-       Explain what a single page app is and how to make one SEO-friendly.
-       What is the extent of your experience with Promises and/or their polyfills?
-       What are the pros and cons of using Promises instead of callbacks?
-       What are some of the advantages/disadvantages of writing JavaScript code in a language that compiles to JavaScript?
-       What tools and techniques do you use for debugging JavaScript code?
-       What language constructions do you use for iterating over object properties and array items?
-       Explain the difference between mutable and immutable objects.
-       Explain the difference between synchronous and asynchronous functions.
-       What is event loop? What is the difference between call stack and task queue?
-       Explain the differences on the usage of foo between function foo() {} and var foo = function() {}
-       What are the differences between variables created using let, var or const?
-       What are the differences between ES6 class and ES5 function constructors?
-       Can you offer a use case for the new arrow => function syntax? How does this new syntax differ from other functions?
-       What advantage is there for using the arrow syntax for a method in a constructor?
-       What is the definition of a higher-order function?
-       Can you give an example for destructuring an object or an array?
-       ES6 Template Literals offer a lot of flexibility in generating strings, can you give an example?
-       Can you give an example of a curry function and why this syntax offers an advantage?
-       What are the benefits of using spread syntax and how is it different from rest syntax?
-       How can you share code between files?
-       Why you might want to create static class members?
 </main>
 
 </body>
